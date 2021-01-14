@@ -2,7 +2,6 @@ package Client.Frames;
 
 import Client.Client;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -69,9 +68,6 @@ public class MenuFrame extends JFrame {
         setLocation(location);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
-        File file = new File("./Client/Frames/");
-        String[] path = file.list();
-        for (String i: path) System.out.println(i);
     }
 
 
@@ -129,12 +125,10 @@ public class MenuFrame extends JFrame {
             name = str.nextToken();
             stat = str.nextToken();
             ImageIcon imageIcon = null;
-            try {
-                File file = new File("src/online.png");
-                if (file.exists()) {
-                    imageIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("./Client/Frames/Icons/online.png")));
-                }
-            } catch (IOException ignored) {}
+            File file = new File("./Client/Frames/Icons/online.png");
+            if (file.exists()) {
+                imageIcon = new ImageIcon("./Client/Frames/Icons/online.png");
+            }
             // Se l utente è online lo scrivo accanto al suo nome
             JMenuItem us = new JMenuItem((!(imageIcon==null))? name: name + (stat.equals("Online")? " Online": ""));
             us.setIcon((stat.equals("Online"))? imageIcon:null);
