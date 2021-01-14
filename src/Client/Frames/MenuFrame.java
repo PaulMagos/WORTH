@@ -32,9 +32,6 @@ public class MenuFrame extends JFrame {
     // Istanza del client chiamante
     Client client;
 
-    public static void main(String []args) throws IOException {
-        MenuFrame frame = new MenuFrame(new Client(), new Point());
-    }
     // Costruttore
     public MenuFrame(Client client, Point location){
         super("Menu");
@@ -72,6 +69,9 @@ public class MenuFrame extends JFrame {
         setLocation(location);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
+        File file = new File("./Client/Frames/");
+        String[] path = file.list();
+        for (String i: path) System.out.println(i);
     }
 
 
@@ -132,7 +132,7 @@ public class MenuFrame extends JFrame {
             try {
                 File file = new File("src/online.png");
                 if (file.exists()) {
-                    imageIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("Client/Frames/online.png")));
+                    imageIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("./Client/Frames/Icons/online.png")));
                 }
             } catch (IOException ignored) {}
             // Se l utente è online lo scrivo accanto al suo nome

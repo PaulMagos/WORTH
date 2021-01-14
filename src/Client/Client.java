@@ -75,19 +75,6 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
         this.channel.connect(this.address);
     }
 
-    public Client() throws IOException {
-        userName = null;
-        projectName = null;
-        inter = null;
-        menu = null;
-        this.ServerIP = "0.0.0.0";
-        this.interfaceTypeGUI = false;
-        address = new InetSocketAddress("localhost", TCP_Port);
-        //this.channel = SocketChannel.open();
-        //this.channel.configureBlocking(true);
-        //this.channel.connect(this.address);
-    }
-
     public void run(){
         if(interfaceTypeGUI) inter = new LoginFrame(this);
         else {
