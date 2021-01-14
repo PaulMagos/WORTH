@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.rmi.NotBoundException;
 
 public class LoginFrame extends JFrame{
     // Pannello superiore e inferiore del frame
@@ -68,7 +67,7 @@ public class LoginFrame extends JFrame{
             }
             try {
                 client.ServerReg(name, pwd);
-            } catch (IOException | NullPointerException | NotBoundException e) {
+            } catch (IOException | NullPointerException  e) {
                 error(e.toString());
             }
         }

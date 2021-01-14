@@ -3,6 +3,7 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.rmi.NotBoundException;
 
 public class MainClient {
     public static void main (String[] args){
@@ -37,7 +38,7 @@ public class MainClient {
             Client client = new Client(ip, interfaceC);
             Thread t = new Thread(client);
             t.start();
-        } catch (IOException e) {
+        } catch (IOException | NotBoundException e) {
             e.printStackTrace();
         }
     }

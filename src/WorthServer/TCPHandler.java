@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class TCPHandler extends Thread {
-    // Port for connection TODO
+    // Port for connection
     private static final int TCP_LOGIN_PORT = 9000;
 
     // ServerSocketChannel e Selector per poter selezionare tra i vari client che si collegano
