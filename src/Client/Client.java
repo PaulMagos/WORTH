@@ -54,14 +54,16 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
     private SocketChannel channel;
 
     // RMI server attributes
-    RMIWORTHServer callBack;
+    RMIWORTHServer RMIServer;
     ClientInterface callStub;
+    // Dichiaro il registro
+    Registry registry;
 
     private final boolean interfaceTypeGUI;
 
 
     // Costruttore con indirizzo
-    public Client(String indirizzo, String interfaceC) throws IOException {
+    public Client(String indirizzo, String interfaceC) throws IOException, NotBoundException {
         userName = null;
         projectName = null;
         inter = null;
@@ -72,6 +74,8 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
         this.channel = SocketChannel.open();
         this.channel.configureBlocking(true);
         this.channel.connect(this.address);
+        this.registry = LocateRegistry.getRegistry(indirizzo , Reg_Port);
+        this.RMIServer = (RMIWORTHServer) registry.lookup("WORTH");
     }
 
     public void run(){
@@ -95,7 +99,7 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
                         if (comandi.get(0).equalsIgnoreCase("register")) {
                             try {
                                 ServerReg(comandi.get(1), comandi.get(2));
-                            } catch (IOException | NotBoundException e) {
+                            } catch (IOException e) {
                                 System.out.println("Errore, esco");
                                 exit(0);
                             }
@@ -299,14 +303,10 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
 
     // Metodo per registrarsi attraverso il metodo register RMI del server
     public synchronized void ServerReg(String name, String password)
-            throws IOException, NotBoundException, NullPointerException {
-        // Ottengo il registro
-        Registry registry = LocateRegistry.getRegistry(ServerIP , Reg_Port);
-        // Casto il servizio che voglio ottenere
-        RMIWORTHServer server = (RMIWORTHServer) registry.lookup("WORTH");
+            throws IOException, NullPointerException {
         // Effettuo richiesta di registrazione e subito dopo di login
         try {
-            if(server.register(name, password)){
+            if(RMIServer.register(name, password)){
                 // Imposto il nome dell'utente
                 this.setUserName(name);
                 ServerLog(name, password);
@@ -357,12 +357,10 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
                         setUserName(name);
                         // Registro il client per la callback in modo da ottenere informazioni su eventuali login
                         // o logout
-                        Registry call = LocateRegistry.getRegistry(ServerIP , Call_Port);
-                        callBack = (RMIWORTHServer) call.lookup("WORTHCall");
                         callStub = (ClientInterface) UnicastRemoteObject.exportObject(this, 0);
                         if(interfaceTypeGUI) menu = new MenuFrame(this , inter.getLocation());
                         else System.out.println("Login Effettuato come "+ this.getUserName());
-                        callBack.registerForCallback(callStub);
+                        RMIServer.registerForCallback(callStub);
                         if(interfaceTypeGUI) {
                             inter.setVisible(false);
                             inter.dispose();
@@ -373,7 +371,7 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
                         else System.out.println(msg);
                     }
             }else channel.close();
-        } catch (IOException | NotBoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -384,7 +382,7 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
         if (this.channel.isConnected()) {
             try {
                 // Rimuovo il client dalla lista di utenti disponibili alla callback
-                callBack.unregisterForCallback(callStub);
+                RMIServer.unregisterForCallback(callStub);
                 // Invio la richiesta di logout al server
                 // Utilizzo il metodo tryConn per ottenere informazioni dal server
                 List<String> msgs = tryConn(proj);

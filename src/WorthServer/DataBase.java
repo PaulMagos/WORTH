@@ -34,9 +34,11 @@ public class DataBase extends RemoteServer implements RMIWORTHServer {
     private List<ClientInterface> clients;
     // FileManager per la gestione della persistenza
     private FileManager files;
+    final String serverIP;
 
     // Costruttore con parametro il path per il salvataggio dei dati
     public DataBase(String filesName) throws IOException, AlreadyBoundException {
+        serverIP = getLocalAddress();
         // Inizializzo le varie liste
         this.files = new FileManager(filesName);
         // Inizializzo la lista dei progetti con la lista dei progetti presenti in memoria
@@ -59,13 +61,23 @@ public class DataBase extends RemoteServer implements RMIWORTHServer {
         // Metto in "vista" le risorse RMI
         RMIWORTHServer stub1 = (RMIWORTHServer) UnicastRemoteObject.exportObject(this, 30001);
         LocateRegistry.createRegistry(6789);
-        LocateRegistry.createRegistry( 7800);
-        Registry registerRegistry = LocateRegistry.getRegistry( 6789);
-        Registry callRegistry = LocateRegistry.getRegistry( 7800);
+       // LocateRegistry.createRegistry( 7800);
+        Registry registerRegistry = LocateRegistry.getRegistry(serverIP,6789);
+        //Registry callRegistry = LocateRegistry.getRegistry( serverIP,7800);
         registerRegistry.bind("WORTH", stub1);
-        callRegistry.bind("WORTHCall", stub1);
+        //callRegistry.bind("WORTHCall", stub1);
         System.out.println("Server RMI per la registrazione avviato sulla porta: " + 6789);
-        System.out.println("Server RMI per la callback avviato sulla porta:      " + 7800);
+        //System.out.println("Server RMI per la callback avviato sulla porta:      " + 7800);
+    }
+
+    private String getLocalAddress(){
+        Socket socket = new Socket();
+        try {
+            socket.connect(new InetSocketAddress("google.com", 80));
+        } catch (IOException e) {
+            return "localhost";
+        }
+        return socket.getLocalAddress().getHostAddress();
     }
 
 
