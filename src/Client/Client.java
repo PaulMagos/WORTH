@@ -2,8 +2,8 @@ package Client;
 import Client.Frames.LoginFrame;
 import Client.Frames.MenuFrame;
 import Client.Frames.ProjectFrame;
-import WorthServer.RMIWORTHServer;
 import MyExceptions.UserAlreadyPresentException;
+import WorthServer.RMIWORTHServer;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
@@ -24,7 +24,8 @@ import java.util.*;
 import static java.lang.System.exit;
 
 public class Client extends RemoteServer implements Runnable, ClientInterface {
-    public static final int RMI_PORT = 6789;
+    public static final int Reg_Port = 6789;
+    public static final int Call_Port = 7800;
     public static final int TCP_Port = 9000;
     public static final int Chat_Port = 5000;
     private final String ServerIP;
@@ -53,15 +54,14 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
     private SocketChannel channel;
 
     // RMI server attributes
-    RMIWORTHServer RMIserver;
-    Registry registry;
+    RMIWORTHServer callBack;
     ClientInterface callStub;
 
     private final boolean interfaceTypeGUI;
 
 
     // Costruttore con indirizzo
-    public Client(String indirizzo, String interfaceC) throws IOException, NotBoundException {
+    public Client(String indirizzo, String interfaceC) throws IOException {
         userName = null;
         projectName = null;
         inter = null;
@@ -72,8 +72,6 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
         this.channel = SocketChannel.open();
         this.channel.configureBlocking(true);
         this.channel.connect(this.address);
-        this.registry = LocateRegistry.getRegistry(ServerIP , RMI_PORT);
-        this.RMIserver =  (RMIWORTHServer) registry.lookup("WORTH");
     }
 
     public void run(){
@@ -302,10 +300,13 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
     // Metodo per registrarsi attraverso il metodo register RMI del server
     public synchronized void ServerReg(String name, String password)
             throws IOException, NotBoundException, NullPointerException {
-
+        // Ottengo il registro
+        Registry registry = LocateRegistry.getRegistry(ServerIP , Reg_Port);
+        // Casto il servizio che voglio ottenere
+        RMIWORTHServer server = (RMIWORTHServer) registry.lookup("WORTH");
         // Effettuo richiesta di registrazione e subito dopo di login
         try {
-            if(RMIserver.register(name, password)){
+            if(server.register(name, password)){
                 // Imposto il nome dell'utente
                 this.setUserName(name);
                 ServerLog(name, password);
@@ -356,10 +357,12 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
                         setUserName(name);
                         // Registro il client per la callback in modo da ottenere informazioni su eventuali login
                         // o logout
+                        Registry call = LocateRegistry.getRegistry(ServerIP , Call_Port);
+                        callBack = (RMIWORTHServer) call.lookup("WORTHCall");
                         callStub = (ClientInterface) UnicastRemoteObject.exportObject(this, 0);
                         if(interfaceTypeGUI) menu = new MenuFrame(this , inter.getLocation());
                         else System.out.println("Login Effettuato come "+ this.getUserName());
-                        RMIserver.registerForCallback(callStub);
+                        callBack.registerForCallback(callStub);
                         if(interfaceTypeGUI) {
                             inter.setVisible(false);
                             inter.dispose();
@@ -370,7 +373,7 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
                         else System.out.println(msg);
                     }
             }else channel.close();
-        } catch (IOException e) {
+        } catch (IOException | NotBoundException e) {
             e.printStackTrace();
         }
     }
@@ -381,7 +384,7 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
         if (this.channel.isConnected()) {
             try {
                 // Rimuovo il client dalla lista di utenti disponibili alla callback
-                RMIserver.unregisterForCallback(callStub);
+                callBack.unregisterForCallback(callStub);
                 // Invio la richiesta di logout al server
                 // Utilizzo il metodo tryConn per ottenere informazioni dal server
                 List<String> msgs = tryConn(proj);

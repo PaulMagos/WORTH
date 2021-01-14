@@ -59,9 +59,13 @@ public class DataBase extends RemoteServer implements RMIWORTHServer {
         // Metto in "vista" le risorse RMI
         RMIWORTHServer stub1 = (RMIWORTHServer) UnicastRemoteObject.exportObject(this, 30001);
         LocateRegistry.createRegistry(6789);
-        Registry registerRegistry = LocateRegistry.getRegistry("localhost", 6789);
+        LocateRegistry.createRegistry( 7800);
+        Registry registerRegistry = LocateRegistry.getRegistry( 6789);
+        Registry callRegistry = LocateRegistry.getRegistry( 7800);
         registerRegistry.bind("WORTH", stub1);
+        callRegistry.bind("WORTHCall", stub1);
         System.out.println("Server RMI per la registrazione avviato sulla porta: " + 6789);
+        System.out.println("Server RMI per la callback avviato sulla porta:      " + 7800);
     }
 
 
