@@ -1,4 +1,7 @@
 package Client;
+import Client.Frames.LoginFrame;
+import Client.Frames.MenuFrame;
+import Client.Frames.ProjectFrame;
 import WorthServer.RMIWORTHServer;
 import MyExceptions.UserAlreadyPresentException;
 
@@ -70,6 +73,19 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
         this.channel = SocketChannel.open();
         this.channel.configureBlocking(true);
         this.channel.connect(this.address);
+    }
+
+    public Client() throws IOException {
+        userName = null;
+        projectName = null;
+        inter = null;
+        menu = null;
+        this.ServerIP = "0.0.0.0";
+        this.interfaceTypeGUI = false;
+        address = new InetSocketAddress("localhost", TCP_Port);
+        //this.channel = SocketChannel.open();
+        //this.channel.configureBlocking(true);
+        //this.channel.connect(this.address);
     }
 
     public void run(){

@@ -1,4 +1,4 @@
-package WorthServer;
+package WorthServer.Project;
 
 import MyExceptions.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;

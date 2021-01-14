@@ -1,4 +1,6 @@
-package Client;
+package Client.Frames;
+
+import Client.Client;
 
 import javax.swing.*;
 import java.awt.*;
@@ -92,7 +94,7 @@ public class LoginFrame extends JFrame{
         }
     }
     // Dialog panel per gli errori
-    protected void error(String error){
+    public void error(String error){
         JOptionPane.showMessageDialog(this, error, "Error",JOptionPane.ERROR_MESSAGE);
     }
 

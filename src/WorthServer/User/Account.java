@@ -1,4 +1,4 @@
-package WorthServer;
+package WorthServer.User;
 
 import MyExceptions.WrongPasswordException;
 

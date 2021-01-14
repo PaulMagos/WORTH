@@ -1,5 +1,7 @@
 package Client;
 
+import Client.Frames.ChatFrame;
+
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;

@@ -1,4 +1,6 @@
-package Client;
+package Client.Frames;
+
+import Client.Client;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
