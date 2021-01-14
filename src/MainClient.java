@@ -7,11 +7,12 @@ public class MainClient {
     public static void main (String[] args){
         // check argomenti
         String ip = "localhost";
-        String interfaceC = "terminal";
+        String interfaceC = "gui";
         try {
             ip = args[0];
         }catch (ArrayIndexOutOfBoundsException e){
-            System.out.println("Usage: java -cp [jars] MainClassClient [optional ip of server] [optional interface type]");
+            System.out.println("Usage: java -cp [jars] MainClassClient [optional ip of server] "
+                    + "[optional interface type {termina, gui}]");
             System.out.println("Nessun ip immesso uso localhost (server su stesso pc)");
         }
         try {

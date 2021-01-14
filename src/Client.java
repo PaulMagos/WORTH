@@ -108,11 +108,8 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
                             // Accesso al server già effettuato, verifico se si vuole accedere o creare un progetto
                             case "projectcreate":
                                 try {
-                                    if (!(comandi.size() > 1)) {
-                                        help();
-                                        break;
-                                    }
-                                    createProject(comandi.get(1));
+                                    if (!(comandi.size() > 1)) help();
+                                    else createProject(comandi.get(1));
                                     continue;
                                 } catch (IOException e) {
                                     System.out.println("Errore, esco");
@@ -120,17 +117,12 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
                                 }
                                 break;
                             case "projectaccess":
-                                if (!(comandi.size() > 1)) {
-                                    help();
-                                    break;
-                                }
-                                accessProject(comandi.get(1));
+                                if (!(comandi.size() > 1)) help();
+                                else accessProject(comandi.get(1));
                                 break;
                             // Verifico se si voglia visualizzare la lista degli utenti
                             case "users":
-                                users.forEach((k, v) -> {
-                                    System.out.println(k);
-                                });
+                                users.keySet().forEach(System.out::println);
                                 break;
                             // Verifico se si voglia visualizzare la lista degli utenti online
                             case "onlineusers":
@@ -148,6 +140,7 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
                         }
                         help();
                     } else{
+                        try {
                             // Login effettuato e accesso al progetto effettuato
                             switch (comandi.get(0).toLowerCase()) {
                                 case "createcard":
@@ -156,21 +149,21 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
                                     } else {
                                         createCard(comandi.get(1), comandi.get(2));
                                     }
-                                    break;
+                                    continue;
                                 case "showcard":
                                     if (comandi.size() != 2) {
                                         help();
                                     } else {
                                         showCard(comandi.get(1));
                                     }
-                                    break;
+                                    continue;
                                 case "cardhistory":
                                     if (comandi.size() != 2) {
                                         help();
                                     } else {
                                         showCardHistory(comandi.get(1));
                                     }
-                                    break;
+                                    continue;
                                 case "movecard":
                                     if (comandi.size() != 4) {
                                         help();
@@ -181,17 +174,17 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
                                             System.out.println("List names can be: TODO INPROGRESS TOBEREVISITED DONE");
                                         }
                                     }
-                                    break;
+                                    continue;
                                 case "logout":
                                     logOut();
-                                    break;
+                                    continue;
                                 case "addmember":
                                     if (comandi.size() != 2) {
                                         help();
                                     } else {
                                         addMember(comandi.get(1));
                                     }
-                                    break;
+                                    continue;
                                 case "deleteproject":
                                     if (comandi.size() != 1) {
                                         help();
@@ -202,28 +195,28 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
                                         if (ine.equals("si"))
                                             deleteProject();
                                     }
-                                    break;
+                                    continue;
                                 case "cardslist":
                                     if (comandi.size() != 1) {
                                         help();
                                     } else {
                                         CardsList();
                                     }
-                                    break;
+                                    continue;
                                 case "memberslist":
                                     if (comandi.size() != 1) {
                                         help();
                                     } else {
                                         MembersList();
                                     }
-                                    break;
+                                    continue;
                                 case "readchat":
                                     if (comandi.size() != 1) {
                                         help();
                                     } else {
                                         this.chat.read();
                                     }
-                                    break;
+                                    continue;
                                 case "sendonchat":
                                     if (comandi.size() == 1) {
                                         help();
@@ -237,9 +230,13 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
                                             exit(0);
                                         }
                                     }
-                                    break;
+                                    continue;
                             }
-
+                        }catch (IndexOutOfBoundsException e){
+                            help();
+                            break;
+                        }
+                        help();
                     }
                 }
             }
@@ -256,6 +253,7 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
 
     // Help menu per la versione da terminale
     private void help() {
+        System.out.println();
         if (this.userName==null){
             System.out.println("Comandi possibili:");
             System.out.println("login nome_utente password");
@@ -284,6 +282,7 @@ public class Client extends RemoteServer implements Runnable, ClientInterface {
                 System.out.println("Log out                 :    logout");
             }
         }
+        System.out.println();
     }
 
     // Getter e setter per gli attributi del nome del client e del progetto che sta accedendo

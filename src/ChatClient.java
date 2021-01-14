@@ -19,6 +19,7 @@ class MessageReceiver implements Runnable {
         this.frame = frame;
         this.sock = sock;
         buf = new byte[1024];
+        mode = true;
     }
     // Costruttore per chat da terminale
     MessageReceiver(MulticastSocket sock, String name){
@@ -26,6 +27,7 @@ class MessageReceiver implements Runnable {
         this.sock = sock;
         buf = new byte[1024];
         messages = new ArrayList<>();
+        mode = false;
     }
 
     public void run() {
