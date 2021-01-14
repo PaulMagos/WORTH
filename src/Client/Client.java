@@ -1,3 +1,5 @@
+package Client;
+import WorthServer.RMIWORTHServer;
 import MyExceptions.UserAlreadyPresentException;
 
 import javax.xml.bind.DatatypeConverter;

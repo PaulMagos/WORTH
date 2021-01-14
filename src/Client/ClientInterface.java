@@ -1,3 +1,5 @@
+package Client;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Map;

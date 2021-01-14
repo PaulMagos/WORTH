@@ -1,3 +1,5 @@
+package Client;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -123,7 +125,7 @@ public class MenuFrame extends JFrame {
             try {
                 File file = new File("src/online.png");
                 if (file.exists()) {
-                    imageIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("online.png")));
+                    imageIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("Client/online.png")));
                 }
             } catch (IOException ignored) {}
             // Se l utente è online lo scrivo accanto al suo nome

@@ -1,3 +1,5 @@
+package WorthServer;
+
 import MyExceptions.WrongPasswordException;
 
 import java.util.Date;

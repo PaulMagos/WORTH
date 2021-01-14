@@ -1,3 +1,4 @@
+import Client.Client;
 import com.formdev.flatlaf.FlatDarculaLaf;
 
 import javax.swing.*;

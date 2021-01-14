@@ -1,3 +1,5 @@
+package WorthServer;
+
 import MyExceptions.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

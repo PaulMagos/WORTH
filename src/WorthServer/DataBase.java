@@ -1,3 +1,6 @@
+package WorthServer;
+
+import Client.ClientInterface;
 import MyExceptions.*;
 
 import java.io.IOException;
