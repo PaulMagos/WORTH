@@ -25,7 +25,7 @@ Description:
 * Takes inspiration from projects such as trello, teams and asanas
 * It uses the "Kanban" agile method for organizing projects
 
-* A more detailed description of how this "tool" works, in ITALIAN : [Doc]()
+* A more detailed description of how this "tool" works, in ITALIAN : [Doc](Doc.pdf)
 
 ### Built With
 
