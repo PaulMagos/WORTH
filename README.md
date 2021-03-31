@@ -64,7 +64,7 @@ Description:
      ```
    2. Windows
      ```sh
-     javac -cp MyLib/flat.jar;MyLib/core.jar;MyLib/data.jar;MyLib/anno.jar *.java MyExceptions/*.java Client/*.java WorthServer/*.java Client/Frames/*.java WorthServer/Project/*.java WorthServer/User/*.java
+     javac -cp .;MyLib/jackson-core-2.12.1.jar;MyLib/jackson-databind-2.12.1.jar;MyLib/jackson-annotations-2.12.1.jar;MyLib/flatlaf-0.46.jar *.java MyExceptions/*.java Client/*.java WorthServer/*.java Client/Frames/*.java WorthServer/Project/*.java WorthServer/User/*.java
      ``` 
 4. Run Server
    1. UNIX
